@@ -34,12 +34,14 @@ namespace PNGTuber
 
         private static DiscordClient GetDiscordClient(string token)
         {
-            return new DiscordClient(new DiscordConfiguration
+            var client = new DiscordClient(new DiscordConfiguration
             {
                 Token = token,
                 TokenType = TokenType.Bot,
-                Intents = DiscordIntents.All
+                Intents = DiscordIntents.AllUnprivileged
             });
+            client.ConnectAsync().GetAwaiter().GetResult();
+            return client;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -6,18 +6,18 @@ namespace ExtensionMethods
     {
         public static bool IsJoin(this VoiceStateUpdateEventArgs args)
         {
-            return args.After.Channel != null && args.Before == null;
+            return args.After != null && (args.Before == null || args.Before.Channel == null);
         }
 
         public static bool IsLeave(this VoiceStateUpdateEventArgs args)
         {
-            return args.After.Channel == null && args.Before != null;
+            return (args.After == null || args.After.Channel == null) && args.Before != null;
         }
 
         public static bool IsMove(this VoiceStateUpdateEventArgs args)
         {
-            if (args.Before == null || args.After == null) return false;
-            return args.After.Channel.Id != args.Before.Channel.Id;
+            if (args.Before == null || args.Before.Channel == null || args.After == null || args.After.Channel == null) return false;
+            return args.After.Channel.Id!= args.Before.Channel.Id;
         }
 
         public static bool LeftChannel(this VoiceStateUpdateEventArgs args, ulong channel_id, ulong user_id)

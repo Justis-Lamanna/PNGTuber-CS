@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Threading.Channels;
 using System.Threading;
+using System;
 using DSharpPlus;
 using DSharpPlus.Entities;
 using ExtensionMethods;
@@ -20,22 +21,22 @@ namespace PNGTuber
             this.defaultChannel = configuration.GetValue<ulong>("DefaultChannel");
         }
         
-        public ChannelReader<bool> Online(ulong user_id, ulong? channel_id, CancellationToken cancellationToken)
+        public ChannelReader<bool> Online(string user_id, CancellationToken cancellationToken)
         {
             var channel = Channel.CreateUnbounded<bool>();
-            _ = WriteOnline(channel.Writer, client, channel_id.GetValueOrDefault(this.defaultChannel), user_id, cancellationToken);
+            _ = WriteOnline(channel.Writer, client, this.defaultChannel, Convert.ToUInt64(user_id), cancellationToken);
             return channel.Reader;
         }
 
-        public async Task WriteOnline(ChannelWriter<bool> writer, DiscordClient client, ulong channel_id, ulong user_id, CancellationToken cancellationToken)
+        private async Task WriteOnline(ChannelWriter<bool> writer, DiscordClient client, ulong channel_id, ulong user_id, CancellationToken cancellationToken)
         {
+            Exception local = null;
             try
             {
                 DiscordChannel channel = await client.GetChannelAsync(channel_id);
                 if(channel.GuildId.HasValue)
                 {
-                    DiscordGuild guild = await client.GetGuildAsync(channel.GuildId.Value);
-                    DiscordMember member = await guild.GetMemberAsync(user_id);
+                    DiscordMember member = await channel.Guild.GetMemberAsync(user_id);
                 
                     await writer.WriteAsync(IsOnline(member.VoiceState, channel_id), cancellationToken);
 
@@ -51,9 +52,13 @@ namespace PNGTuber
                 {
                     throw new HubException();
                 }
-            } finally
+            } catch (Exception ex)
             {
-                writer.Complete();
+                local = ex;
+            } 
+            finally
+            {
+                writer.Complete(local);
             }
         }
 
