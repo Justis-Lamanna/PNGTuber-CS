@@ -6,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
+using DSharpPlus;
+
 namespace PNGTuber
 {
     public class Startup
@@ -21,10 +23,22 @@ namespace PNGTuber
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddSignalR();
+            services.AddSingleton(GetDiscordClient(Configuration.GetValue<string>("token")));
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
+            });
+        }
+
+        private static DiscordClient GetDiscordClient(string token)
+        {
+            return new DiscordClient(new DiscordConfiguration
+            {
+                Token = token,
+                TokenType = TokenType.Bot,
+                Intents = DiscordIntents.All
             });
         }
 
@@ -53,9 +67,7 @@ namespace PNGTuber
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}");
+                endpoints.MapHub<VoiceHub>("/voices");
             });
 
             app.UseSpa(spa =>
