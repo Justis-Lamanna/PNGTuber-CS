@@ -11,6 +11,7 @@ import { VoiceService } from '../services/voice.service';
 export class PNGTuberComponent implements OnInit, OnDestroy {
 
   public online: Observable<boolean>;
+  public speaking: Observable<boolean>;
 
   constructor(private voice: VoiceService) { }
    
@@ -19,6 +20,7 @@ export class PNGTuberComponent implements OnInit, OnDestroy {
     await this.voice.start();
 
     this.online = this.voice.online("248612704019808258");
+    this.speaking = this.voice.speaking("248612704019808258");
   }
 
   async ngOnDestroy() {

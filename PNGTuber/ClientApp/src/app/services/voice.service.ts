@@ -34,4 +34,16 @@ export class VoiceService {
       subscriber.add(() => res.dispose());
     });
   }
+
+  speaking(user_id: string): Observable<boolean> {
+    return new Observable(subscriber => {
+      const res = this.connection.stream("Speaking", user_id)
+        .subscribe({
+          next: (item) => subscriber.next(item),
+          error: (err) => subscriber.error(err),
+          complete: () => subscriber.complete()
+        });
+      subscriber.add(() => res.dispose());
+    });
+  }
 }

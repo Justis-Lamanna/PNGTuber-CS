@@ -34,32 +34,47 @@ namespace PNGTuber
             try
             {
                 DiscordChannel channel = await client.GetChannelAsync(channel_id);
-                if(channel.GuildId.HasValue)
+                if (channel.GuildId.HasValue)
                 {
                     DiscordMember member = await channel.Guild.GetMemberAsync(user_id);
-                
+
                     await writer.WriteAsync(IsOnline(member.VoiceState, channel_id), cancellationToken);
 
                     client.VoiceStateUpdated += async (s, e) =>
                     {
-                        if(e.JoinedChannel(channel_id, user_id)) await writer.WriteAsync(true, cancellationToken);
-                        else if(e.LeftChannel(channel_id, user_id)) await writer.WriteAsync(false, cancellationToken);
+                        if (e.JoinedChannel(channel_id, user_id)) await writer.WriteAsync(true, cancellationToken);
+                        else if (e.LeftChannel(channel_id, user_id)) await writer.WriteAsync(false, cancellationToken);
                         else await Task.CompletedTask;
                     };
 
                     await Task.Delay(-1, cancellationToken);
-                } else
+                }
+                else
                 {
                     throw new HubException();
                 }
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 local = ex;
-            } 
+            }
             finally
             {
                 writer.Complete(local);
             }
+        }
+
+        public ChannelReader<bool> Speaking(string user_id, CancellationToken cancellationToken)
+        {
+            var channel = Channel.CreateUnbounded<bool>();
+            _ = WriteSpeaking(channel.Writer, cancellationToken);
+            return channel.Reader;
+        }
+
+        private async Task WriteSpeaking(ChannelWriter<bool> writer, CancellationToken cancellationToken)
+        {
+            await writer.WriteAsync(false, cancellationToken);
+            await Task.Delay(-1, cancellationToken);
         }
 
         private static bool IsOnline(DiscordVoiceState states, ulong channel_id)
