@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ClientApp\src\app\upload\" />
     <Folder Include="ClientApp\src\app\services\" />
   </ItemGroup>
 

@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { HubConnection, HubConnectionBuilder, ISubscription } from "@microsoft/signalr";
 import { Observable } from 'rxjs';
 import { VoiceService } from '../services/voice.service';
@@ -13,14 +14,15 @@ export class PNGTuberComponent implements OnInit, OnDestroy {
   public online: Observable<boolean>;
   public speaking: Observable<boolean>;
 
-  constructor(private voice: VoiceService) { }
+  constructor(private voice: VoiceService, private route: ActivatedRoute) { }
    
 
   async ngOnInit() {
     await this.voice.start();
 
-    this.online = this.voice.online("248612704019808258");
-    this.speaking = this.voice.speaking("248612704019808258");
+    const user = this.route.snapshot.paramMap.get("userId");
+    this.online = this.voice.online(user);
+    this.speaking = this.voice.speaking(user);
   }
 
   async ngOnDestroy() {

@@ -6,18 +6,21 @@ import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { PNGTuberComponent } from './pngtuber/pngtuber.component';
+import { UploadComponent } from './upload/upload/upload.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    PNGTuberComponent
+    PNGTuberComponent,
+    UploadComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
-      { path: '', component: PNGTuberComponent, pathMatch: 'full' }
+      { path: '', component: UploadComponent, pathMatch: 'full' },
+      { path: 'voice/:userId', component: PNGTuberComponent }
     ])
   ],
   providers: [],
