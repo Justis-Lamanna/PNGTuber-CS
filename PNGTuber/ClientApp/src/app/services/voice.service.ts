@@ -16,7 +16,7 @@ export class VoiceService {
   }
 
   async start(): Promise<void> {
-    return this.connection.start();
+    return this.connection.start(); 
   }
 
   async stop(): Promise<void> {

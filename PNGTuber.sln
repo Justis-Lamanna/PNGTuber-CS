@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31515.178
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PNGTuber", "PNGTuber\PNGTuber.csproj", "{7D9FAE39-7E5E-4EB3-B003-02A24249CCBD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PNGTuber", "PNGTuber\PNGTuber.csproj", "{7D9FAE39-7E5E-4EB3-B003-02A24249CCBD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PNGTuber-Backend", "PNGTuber-Backend\PNGTuber-Backend.csproj", "{296A27F5-ACA1-41C6-83AC-26B904FF2B80}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{7D9FAE39-7E5E-4EB3-B003-02A24249CCBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D9FAE39-7E5E-4EB3-B003-02A24249CCBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D9FAE39-7E5E-4EB3-B003-02A24249CCBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{296A27F5-ACA1-41C6-83AC-26B904FF2B80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{296A27F5-ACA1-41C6-83AC-26B904FF2B80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{296A27F5-ACA1-41C6-83AC-26B904FF2B80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{296A27F5-ACA1-41C6-83AC-26B904FF2B80}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
